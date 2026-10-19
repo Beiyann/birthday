@@ -55,10 +55,15 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 /* ============ 滚动容器 ============ */
 .scroller{height:100dvh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;
   -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
+  scroll-timeline-name:--page;scroll-timeline-axis:block;
   /* 整条页面只有这一条渐变。9 屏各占 1/9，停靠点是「屏中主色」与「屏与屏的交界色」。
      背景挂在滚动容器上并跟着内容一起滚（local），整页就是一条连续色带，
      不存在 9 个独立盒子拼接时的亚像素缝。 */
-  background-image:linear-gradient(180deg,
+  background-image:
+    /* 第一层：极淡点阵，26px 一格，贯穿整页 —— 让"纯渐变"变成有暗纹的质感层 */
+    radial-gradient(circle, rgba(255,255,255,.062) 1px, transparent 1.4px),
+    /* 第二层：整页渐变色带 */
+    linear-gradient(180deg,
     #1E2450 0%,    #333F8C 5.56%,
     #4C2348 11.11%,#8A2F48 16.67%,
     #2A1846 22.22%,#05081A 27.78%,
@@ -69,8 +74,9 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     #12404A 77.78%,#18525E 83.33%,
     #3E1C56 88.89%,#4E2180 94.44%,
     #4E2180 100%);
-  background-attachment:local;
-  background-repeat:no-repeat;}
+  background-size:26px 26px, 100% 100%;
+  background-attachment:local, local;
+  background-repeat:repeat, no-repeat;}
 .scroller::-webkit-scrollbar{display:none}
 .screen{
   height:100dvh;min-height:100dvh;
@@ -105,6 +111,46 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   0%  {transform:translate3d(-2%,-1.5%,0) scale(1);    opacity:.82}
   55% {transform:translate3d(2.5%,2%,0)   scale(1.07); opacity:1}
   100%{transform:translate3d(-1%,3%,0)   scale(1.02); opacity:.9}
+}
+
+/* 内容容器：给桥接元素一个可定位的基准（.scroller 自己不能当基准，
+   否则绝对定位子元素会相对可视区、不随滚动内容走） */
+.page{position:relative}
+
+/* 桥接月亮：从 P2 星空里的一颗小月亮，一路放大成 P3 的月亮。
+   top 定在 P2 屏中心（第 3 屏 = 内容 200vh~300vh，中心 250vh），
+   然后靠 transform 往下推 + 放大，全程只动 transform / opacity。 */
+.moon-bridge{
+  position:absolute;left:50%;top:250vh;z-index:50;pointer-events:none;
+  /* 尺寸必须和 P3 的 .moon-disc 一致（实测 150px），终点也要压在 3.5 屏高 */
+  width:min(38.5vw,150px);height:min(38.5vw,150px);
+  margin-left:calc(min(38.5vw,150px) / -2);
+  margin-top:calc(min(38.5vw,150px) / -2);
+  border-radius:50%;overflow:hidden;opacity:0;will-change:transform,opacity;
+  background:#0A121C url("assets/moon-face.webp") center center / cover no-repeat;
+  box-shadow:0 0 44px rgba(150,210,255,.32),inset 0 0 26px rgba(0,6,14,.55);
+  animation:moonBridge linear both;
+  animation-timeline:--page;
+  /* 滚动 198vh（P2 快到底）→ 300vh（P3 正好填满） */
+  animation-range:198vh 300vh;
+  display:none;                 /* 只有支持 scroll timeline 才启用 */
+}
+@supports (animation-timeline: scroll()) {
+  .moon-bridge{display:block}
+}
+/* 和 P3 的 .moon-shade 用同一套明暗，保证交接时是同一张脸 */
+.moon-bridge::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(94deg,
+    rgba(4,9,16,.965) 0%,  rgba(6,12,20,.950) 30%,
+    rgba(7,13,21,.80) 42%, rgba(8,14,22,.36)  51%,
+    rgba(8,14,22,.08) 59%, rgba(8,14,22,0)    68%)}
+
+@keyframes moonBridge{
+  0%   {transform:translate3d(0,0,0)        scale(.055);opacity:0}
+  9%   {opacity:.9}
+  76%  {opacity:.9}
+  100% {transform:translate3d(0,114vh,0)    scale(1);   opacity:0}
 }
 
 /* ============ 通用 ============ */
@@ -161,6 +207,16 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 .wish.nudge{animation:nudge 2.6s ease-in-out 3}
 @keyframes twinkle{0%,100%{opacity:.5;transform:scale(.82)}50%{opacity:1;transform:scale(1.15)}}
 @keyframes nudge{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* 点中星星时向外炸开的一圈光环 */
+.wish-ring{position:fixed;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
+  z-index:95;pointer-events:none;border:1.5px solid rgba(255,196,214,.95);
+  box-shadow:0 0 14px rgba(243,165,178,.8);
+  animation:wishRing .72s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes wishRing{
+  0%   {transform:scale(.35);opacity:1}
+  100% {transform:scale(9);opacity:0}
+}
 
 /* ============ 启动遮罩 ============ */
 #boot{position:fixed;inset:0;z-index:300;display:grid;place-items:center;
@@ -743,18 +799,23 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   }
 
   /* ---- P3 月亮：从小涌现，像浮出水面 ---- */
+  /* 月亮本身由「桥接月亮」从星空里放大带来，所以这里只负责在最后接棒：
+     等桥接月亮到位、开始淡出的那一刻，真月亮才淡入。两者位置重合，看不出切换。 */
   .screen .moon-wrap {
     animation-name: moonRise;
     animation-duration: auto;
-    animation-timing-function: cubic-bezier(.16,1,.3,1);
+    animation-timing-function: linear;
     animation-fill-mode: both;
     animation-timeline: --scr;
-    animation-range: entry 4% entry 62%;
+    animation-range: entry 82% entry 99%;
   }
   @keyframes moonRise {
-    from { opacity: 0; transform: scale(.56); }
-    to   { opacity: 1; transform: scale(1); }
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
+  /* .reveal.d2 的优先级比 .moon-wrap 高，会把 range 抢走（月亮提前出现 → 和桥接月亮重叠）。
+     这里用 (0,3,0) 的写法压回去。 */
+  .screen .reveal.moon-wrap { animation-range: entry 84% entry 99%; }
 
   /* ---- P2 星空：圆形视野睁开 ---- */
   .screen .sky-iris {
@@ -847,6 +908,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 <div class="grain" aria-hidden="true"></div>
 
 <div class="scroller" id="scroller">
+<div class="page">
 
   <!-- ================= P0 ================= -->
   <section class="screen" id="p0">
@@ -906,10 +968,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
       <p class="reveal d2">山东 · 章丘　<b>36.68°N</b>　<b>117.53°E</b><br>太阳刚落下去十八度，天刚黑透</p>
       <div class="p2-hint reveal d3">横 着 划 环 视 · 上 下 划 正 常 滚 动</div>
     </div>
-    <div class="p2-story reveal d3">
-      那天晚上，<em>织女</em>在西北，<em>牛郎</em>在西南<br>
-      中间隔着一整条银河。
-    </div>
+
     <div class="p2-data reveal d4">
       <div><span class="kk">MOON</span><span class="vv">上弦月 45.25%</span></div>
       <div style="text-align:right"><span class="kk">SUN ALT</span><span class="vv">−18.2°</span></div>
@@ -1026,6 +1085,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     <div class="pgno"><em>09</em> / 09<span class="pg-tag">SCORPIO</span></div>
   </section>
 
+  <div class="moon-bridge" aria-hidden="true"></div>
+</div>
 </div>
 
 <script>
@@ -1223,6 +1284,14 @@ const WISH_POS = [
     if (!b || b.classList.contains('done')) return;
     b.classList.add('done');
     wishDone++;
+
+    /* 炸一圈光环 */
+    const rk = document.createElement('div');
+    rk.className = 'wish-ring';
+    rk.style.left = (b.getBoundingClientRect().left + b.getBoundingClientRect().width / 2) + 'px';
+    rk.style.top  = (b.getBoundingClientRect().top  + b.getBoundingClientRect().height / 2) + 'px';
+    document.body.appendChild(rk);
+    setTimeout(() => rk.remove(), 760);
 
     /* 右上角进度 */
     const c = $('#collect');
@@ -1600,14 +1669,6 @@ $('#enterBtn').addEventListener('click', async () => {
       const spr = st.mag < 0.9 ? SPR_L : st.mag < 2.05 ? SPR_M : SPR_S;
       const dw = spr.width * (0.34 + st.lum * 0.68) * (0.64 + edge * 0.36);
       ctx.drawImage(spr, p[0] - dw / 2, p[1] - dw / 2, dw, dw);
-
-      /* 织女 / 牛郎 —— 故事主角，多一层柔光 */
-      if (st.nm === '织女一' || st.nm === '牛郎星') {
-        const d2 = dw * 2.5;
-        ctx.globalAlpha = 0.20;
-        ctx.drawImage(spr, p[0] - d2 / 2, p[1] - d2 / 2, d2, d2);
-        ctx.globalAlpha = 1;
-      }
 
       /* 最亮的几颗加十字星芒 */
       if (st.mag < 1.45) {
