@@ -56,6 +56,9 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 .scroller{height:100dvh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;
   -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
   scroll-timeline-name:--page;scroll-timeline-axis:block;
+  /* proximity：只有滚到离整屏很近时才吸过去，不会强制一页一页，
+     手感和连续滚动几乎一样，但停下来的位置更"到位" */
+  scroll-snap-type:y proximity;
   /* 整条页面只有这一条渐变。9 屏各占 1/9，停靠点是「屏中主色」与「屏与屏的交界色」。
      背景挂在滚动容器上并跟着内容一起滚（local），整页就是一条连续色带，
      不存在 9 个独立盒子拼接时的亚像素缝。 */
@@ -79,7 +82,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   background-repeat:repeat, no-repeat;}
 .scroller::-webkit-scrollbar{display:none}
 .screen{
-  height:100dvh;min-height:100dvh;
+  height:100dvh;min-height:100dvh;scroll-snap-align:start;
   position:relative;overflow:hidden;display:flex;flex-direction:column;isolation:isolate;
   /* 背景是一条纵向渐变：顶部接住上一屏的颜色、中间是本屏色、底部交给下一屏。
      于是连成一条长页面时，滚动过程中背景是连续流动的，不会硬切。 */
@@ -1524,7 +1527,7 @@ $('#enterBtn').addEventListener('click', async () => {
   const lowCv = document.createElement('canvas');
   const lctx  = lowCv.getContext('2d');
   let LW = 1, LH = 1;
-  const LS = 2;                      // 降采样倍数
+  const LS = 2;                      // 降采样倍数：银河本来就是雾，不抢 DPR 的预算
   /* 星云单独一层，降到 1/4 分辨率：放大 4 倍本身就是无缝的雾，
      不会像 1/2 层那样被 blur 糊出一颗颗圆斑 */
   const nCv  = document.createElement('canvas');
@@ -1533,7 +1536,11 @@ $('#enterBtn').addEventListener('click', async () => {
 
   /* ---- 尺寸 ---- */
   function resize() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+    /* 高分屏用满 DPR（清晰），核心数/内存偏低的机器退一档（保流畅）。
+   iPhone 和主流安卓的 DPR 都是 3，之前的 2.5 上限把它们砍掉了一截。 */
+    const LOW_END = (navigator.hardwareConcurrency || 8) <= 4 ||
+                    (navigator.deviceMemory || 8) <= 3;
+    DPR = Math.min(window.devicePixelRatio || 1, LOW_END ? 2 : 3);
     W = cv.clientWidth || window.innerWidth;
     H = cv.clientHeight || window.innerHeight;
     cv.width  = Math.round(W * DPR);
@@ -1562,9 +1569,9 @@ $('#enterBtn').addEventListener('click', async () => {
     x.fillRect(0, 0, size, size);
     return c;
   }
-  const SPR_S = makeGlow(20, [[0,'rgba(255,255,255,1)'],[0.09,'rgba(255,250,253,.86)'],[0.26,'rgba(255,228,240,.30)'],[0.55,'rgba(255,206,228,.06)'],[1,'rgba(255,196,222,0)']]);
-  const SPR_M = makeGlow(34, [[0,'rgba(255,255,255,1)'],[0.08,'rgba(255,250,253,.90)'],[0.22,'rgba(255,230,242,.34)'],[0.48,'rgba(255,208,230,.08)'],[1,'rgba(255,190,218,0)']]);
-  const SPR_L = makeGlow(64, [[0,'rgba(255,255,255,1)'],[0.06,'rgba(255,252,255,.94)'],[0.15,'rgba(255,234,244,.40)'],[0.36,'rgba(255,212,232,.10)'],[1,'rgba(255,186,216,0)']]);
+  const SPR_S = makeGlow(26, [[0,'rgba(255,255,255,1)'],[0.09,'rgba(255,250,253,.86)'],[0.26,'rgba(255,228,240,.30)'],[0.55,'rgba(255,206,228,.06)'],[1,'rgba(255,196,222,0)']]);
+  const SPR_M = makeGlow(44, [[0,'rgba(255,255,255,1)'],[0.08,'rgba(255,250,253,.90)'],[0.22,'rgba(255,230,242,.34)'],[0.48,'rgba(255,208,230,.08)'],[1,'rgba(255,190,218,0)']]);
+  const SPR_L = makeGlow(88, [[0,'rgba(255,255,255,1)'],[0.06,'rgba(255,252,255,.94)'],[0.15,'rgba(255,234,244,.40)'],[0.36,'rgba(255,212,232,.10)'],[1,'rgba(255,186,216,0)']]);
 
   /* 亮度分档填充色 —— 热循环里不拼字符串 */
   const N_LV = 24, C_DUST = [], C_GAL = [];
