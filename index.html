@@ -2038,26 +2038,18 @@ $('#enterBtn').addEventListener('click', async () => {
 /* =========================================================
    7. P4 照片
    ========================================================= */
+/* 只留文件名：照片上不显示任何文字 */
 const PHOTOS = [
-  ['photo-01', '2025 冬', '清晨七点，你还没醒'],
-  ['photo-02', '2025 秋', '商场里比了个耶'],
-  ['photo-03', '2025',    '地铁上，靠在一起'],
-  ['photo-04', '2025 春', '白花树下'],
-  ['photo-05', '2025',    '泉水边'],
-  ['photo-06', '2024',    '你靠着我'],
-  ['photo-07', '2024',    '吃饭，你比耶'],
-  ['photo-08', '2024',    '粉色外套'],
-  ['photo-09', '2023',    '红底那张'],
-  ['photo-10', '2023',    '优衣库'],
-  ['photo-11', '2023',    '公园，白裙子'],
-  ['photo-12', '2022',    '电影院']
+  'photo-01', 'photo-02', 'photo-03', 'photo-04',
+  'photo-05', 'photo-06', 'photo-07', 'photo-08',
+  'photo-09', 'photo-10', 'photo-11', 'photo-12'
 ];
 (function(){
   const rail = $('#rail');
   const dotBox = $('#p4dots');
   PHOTOS.forEach(() => dotBox.appendChild(document.createElement('i')));
   const dots = Array.from(dotBox.children);
-  PHOTOS.forEach(([f, t, c]) => {
+  PHOTOS.forEach(f => {
     const d = document.createElement('div');
     d.className = 'p4-card';
     const src = f.indexOf('data:') === 0 ? f : 'assets/photos/' + f + '.jpg';
