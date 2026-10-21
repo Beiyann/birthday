@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#1D1116">
 <meta property="og:type" content="website">
-<meta property="og:title" content="二十年，刚好今天">
+<meta property="og:title" content="二十载星霜">
 <meta property="og:description" content="2006.10.29 — 2026.10.29　给你的 20 岁生日礼物">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='7' fill='%23F3A5B2'/%3E%3C/svg%3E">
-<title>二十年，刚好今天</title>
+<title>二十载星霜</title>
 <style>
 :root{
   --bg:#0B0D1A;--bg2:#141A30;--ink:#FCF6F2;
@@ -539,11 +539,10 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   -webkit-mask:radial-gradient(ellipse 72% 58% at 50% 46%, #000 22%, transparent 80%);
   mask:radial-gradient(ellipse 72% 58% at 50% 46%, #000 22%, transparent 80%)}
 #p4.on .p4-blur{opacity:.62}
-.p4-big{position:absolute;left:14px;bottom:calc(118px + var(--safe-b));z-index:1;
-  font-size:33vw;font-weight:100;line-height:.82;letter-spacing:-.055em;pointer-events:none;
-  color:transparent;-webkit-text-stroke:1px rgba(255,196,120,.16);
-  font-family:"Cascadia Mono",ui-monospace,monospace;
-  transition:opacity .45s}
+/* 照片页不标年份，只在下方留一句诗 */
+.p4-line{position:absolute;left:0;right:0;bottom:calc(126px + var(--safe-b));z-index:1;
+  text-align:center;pointer-events:none;font-size:10.5px;letter-spacing:.38em;
+  color:rgba(255,208,150,.32);text-indent:.38em}
 .p4-head{position:absolute;top:calc(64px + var(--safe-t));left:32px;right:32px;z-index:5;display:flex;
   justify-content:space-between;align-items:flex-start}
 .p4-head h2{font-size:21px;font-weight:200;letter-spacing:.22em}
@@ -565,9 +564,9 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 .p4-card.show img{filter:none}
 .p4-card::after{content:"";position:absolute;inset:0;border-radius:15px;
   border:1px solid rgba(255,206,140,.20);pointer-events:none}
-.p4-card .cap{position:absolute;left:0;right:0;bottom:0;padding:34px 15px 15px;
-  background:linear-gradient(to top,rgba(21,13,20,.97) 12%,rgba(21,13,20,.0) 100%)}
-.p4-card .cap .t{font-size:7px;letter-spacing:.26em;color:var(--c-amber);opacity:.95;margin-bottom:6px;
+.p4-card .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 11px;
+  background:linear-gradient(to top,rgba(21,13,20,.72) 0%,rgba(21,13,20,0) 100%)}
+.p4-card .cap .t{font-size:7.5px;letter-spacing:.3em;color:rgba(255,214,150,.72);opacity:1;margin-bottom:0;
   font-family:"Cascadia Mono",ui-monospace,monospace}
 .p4-card .cap .c{font-size:12px;letter-spacing:.07em;color:#F2E8E3;line-height:1.7}
 .p4-dots{position:absolute;bottom:calc(104px + var(--safe-b));left:0;right:0;z-index:5;
@@ -824,6 +823,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   .p1-main h1 [data-c="5"] { animation-range: entry 18% entry 53%; }
   .p1-main h1 [data-c="6"] { animation-range: entry 21% entry 56%; }
   .p1-main h1 [data-c="7"] { animation-range: entry 24% entry 59%; }
+  .p1-main h1 [data-c="8"] { animation-range: entry 27% entry 62%; }
+  .p1-main h1 [data-c="9"] { animation-range: entry 30% entry 65%; }
   @keyframes charRise {
     from { opacity: 0; transform: translate3d(0, .5em, 0) rotate(5deg); }
     to   { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
@@ -914,8 +915,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 <div class="lock" id="lock">
   <div class="lock-in">
     <div class="lock-eye">2 0 2 6 · 1 0 · 2 9</div>
-    <div class="lock-title">开启</div>
-    <div class="lock-hint">四位密码 · 是你的生日</div>
+    <div class="lock-title">入 夜</div>
+    <div class="lock-hint">四 位 · 是 你 的 生 日</div>
     <div class="lock-dots" id="lockDots"><i></i><i></i><i></i><i></i></div>
     <div class="lock-pad" id="lockPad">
       <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
@@ -946,7 +947,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <section class="screen" id="p0">
     <div class="p0-in">
       <div id="sparks" style="position:absolute;left:50%;top:50%;width:0;height:0"></div>
-      <div class="p0-eye">生 日 礼 物</div>
+      <div class="p0-eye">赠 你</div>
       <div class="p0-star">
         <div class="p0-rings" aria-hidden="true"><i></i><i></i><i></i></div>
         <svg viewBox="0 0 150 150">
@@ -963,8 +964,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
           <circle cx="75" cy="75" r="30" fill="none" stroke="rgba(255,214,180,.10)" stroke-width=".7"/>
         </svg>
       </div>
-      <button class="p0-btn" id="enterBtn">点 一 下</button>
-      <div class="p0-tip">这一路上，藏了 <em>12 颗星</em><br>右上角是你的星袋</div>
+      <button class="p0-btn" id="enterBtn">入 夜</button>
+      <div class="p0-tip">途 中 藏 星 <em>十 二</em><br>右 上 是 你 的 星 袋</div>
     </div>
     <div class="p0-meta"><span>2006 · 10 · 29</span><span>18:20</span><span>章丘 36.68°N</span></div>
     <div class="p0-foot">向 下 滑 动</div>
@@ -979,11 +980,11 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     <div class="p1-top reveal"><span>2006.10.29</span><span class="arw"></span><span>2026.10.29</span></div>
     <div class="p1-main">
       <div class="p1-deco reveal d2"></div>
-      <h1><span data-c="0">二</span><span data-c="1">十</span><span data-c="2">年</span><span data-c="3">，</span><br><span data-c="4">刚</span><span data-c="5">好</span><em data-c="6">今</em><em data-c="7">天</em></h1>
-      <div class="p1-sub reveal d2">刚 好 是 你</div>
+      <h1><span data-c="0">二</span><span data-c="1">十</span><span data-c="2">载</span><span data-c="3">星</span><span data-c="4">霜</span><span data-c="5">，</span><br><span data-c="6">尽</span><span data-c="7">在</span><em data-c="8">今</em><em data-c="9">夕</em></h1>
+      <div class="p1-sub reveal d2">与 你</div>
     </div>
     <div class="p1-big reveal d3" aria-hidden="true">20</div>
-    <div class="p1-down reveal d3">开 始</div>
+    <div class="p1-down reveal d3">序</div>
     <div class="p1-meta reveal d3">7 3 0 5 天<br>地 球 绕 太 阳 2 0 圈</div>
     <div class="pgno"><em>02</em> / 09<span class="pg-tag">TWENTY</span></div>
   </section>
@@ -996,7 +997,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     <div class="meteors" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="p2-copy">
       <div class="k reveal">OBSERVATION · 2006.10.29　18:45</div>
-      <h2 class="reveal d1">你出生那天的天空</h2>
+      <h2 class="reveal d1">你降生那夜的天空</h2>
       <p class="reveal d2">山东 · 章丘　<b>36.68°N</b>　<b>117.53°E</b><br>太阳刚落下去十八度，天刚黑透</p>
       <div class="p2-hint reveal d3">横 着 划 环 视 · 上 下 划 正 常 滚 动</div>
     </div>
@@ -1016,8 +1017,8 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <!-- ================= P3 月相 ================= -->
   <section class="screen" id="p3">
     <div class="p3-copy">
-      <div class="big reveal">那天月亮正好是一半。</div>
-      <div class="small reveal d1">缺的那一半，大概是在等我。</div>
+      <div class="big reveal">彼时月，只圆了一半。</div>
+      <div class="small reveal d1">余下的，慢慢圆。</div>
     </div>
     <div class="moon-wrap reveal d2"><div class="moon-tick" aria-hidden="true"></div><div class="moon-ring"></div><div class="moon-disc"><picture><source srcset="assets/moon-face.webp" type="image/webp"><img class="moon-tex" src="assets/moon-face.png" alt="2006 年 10 月 29 日的上弦月"></picture><div class="moon-shade"></div></div></div>
     <div class="p3-data reveal d3">
@@ -1035,11 +1036,11 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <section class="screen" id="p4">
     <div class="p4-blur" id="p4blur" aria-hidden="true"></div>
     <div class="p4-head">
-      <div><h2 class="reveal">我们</h2><p class="reveal d1">左右滑动</p></div>
+      <div><h2 class="reveal">此间</h2><p class="reveal d1">向 左 划</p></div>
       <div class="p4-count reveal d1"><span class="now" id="photoIdx">01</span><span class="all">/ 12</span></div>
     </div>
     <div class="p4-rail" id="rail"></div>
-    <div class="p4-big" id="p4big" aria-hidden="true">2022</div>
+    <div class="p4-line" aria-hidden="true">当 时 只 道 是 寻 常</div>
     <div class="p4-dots" id="p4dots"></div>
     <div class="p4-foot reveal d3">
       <span>2022</span>
@@ -1052,12 +1053,12 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <!-- ================= P5 礼物 ================= -->
   <section class="screen" id="p5">
     <div class="p5-head">
-      <h2 class="reveal">礼物</h2>
-      <p class="reveal d1">翻到哪个，就是哪个</p>
+      <h2 class="reveal">四 样</h2>
+      <p class="reveal d1">翻 开 才 知</p>
     </div>
     <div class="p5-big" aria-hidden="true">04</div>
     <div class="p5-grid" id="giftGrid"></div>
-    <div class="p5-foot reveal d3">四 张 · 点 一 下 翻 开 · 每 张 都 不 一 样</div>
+    <div class="p5-foot reveal d3">四 张 · 各 有 其 意</div>
     <div class="pgno"><em>06</em> / 09<span class="pg-tag">GIFTS</span></div>
   </section>
 
@@ -1067,11 +1068,11 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     <div class="p6-orbit"></div>
     <div class="ticks" id="ticks"></div>
     <div class="days-wrap">
-      <div class="days-label reveal">在 一 起</div>
+      <div class="days-label reveal">相 遇 至 今</div>
       <div class="days-num reveal d1" id="daysNum">2161</div>
       <div class="days-unit reveal d2" id="daysUnit">天</div>
       <div class="days-sub reveal d2">2020. 11. 16　—　今 天</div>
-      <div class="days-hint reveal d3">点 一 下 换 个 说 法</div>
+      <div class="days-hint reveal d3">点 一 下，换 个 数 法</div>
     </div>
     <div class="days-grid reveal d4">
       <div><b id="dgYear">5</b>年</div>
@@ -1086,17 +1087,17 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   <!-- ================= P7 地图 ================= -->
   <section class="screen" id="p7">
     <div class="p7-head">
-      <div><h2 class="reveal">去过的地方</h2><p class="reveal d1">点省份，标记你去过</p></div>
+      <div><h2 class="reveal">行 迹</h2><p class="reveal d1">点 一 处，记 一 处</p></div>
       <div class="p7-legend reveal d1">
         <span><i style="background:rgba(255,206,110,.9)"></i>家</span>
-        <span><i style="background:rgba(255,138,96,.65)"></i>去过</span>
-        <span><i style="background:rgba(111,232,200,.10);border:1px solid rgba(111,232,200,.30)"></i>还 没</span>
+        <span><i style="background:rgba(255,138,96,.65)"></i>曾 至</span>
+        <span><i style="background:rgba(111,232,200,.10);border:1px solid rgba(111,232,200,.30)"></i>未 至</span>
       </div>
     </div>
     <div class="mapbox" id="mapbox"><svg id="chinaMap"></svg></div>
     <div class="p7-foot reveal d3">
       <span class="hint">拖 动 可 移 动 · 双 指 可 缩 放</span>
-      <button class="p7-reset" id="mapReset">回 到 全 国</button>
+      <button class="p7-reset" id="mapReset">归 位</button>
     </div>
     <div class="pgno"><em>08</em> / 09<span class="pg-tag">PLACES</span></div>
   </section>
@@ -1109,9 +1110,9 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     </div>
     <div class="p8-comet"></div>
     <div class="p8-text">
-      <div class="l1 reveal">一路上你捡起的那些星<br>连起来，是<em>天蝎座</em></div>
-      <div class="l2 reveal d1">哈雷彗星 76 年才回来一次</div>
-      <div class="l3 reveal d2">下一次是 2061 年 7 月　那时候我们 55 岁</div>
+      <div class="l1 reveal">散 则 满 天<br>聚 则 成 <em>座</em></div>
+      <div class="l2 reveal d1">彗星七十六年一回</div>
+      <div class="l3 reveal d2">再 来 时，是 2061 年 的 夏</div>
     </div>
     <div class="p8-sign">2 0 2 6 · 1 0 · 2 9　　2 0 岁 生 日 快 乐</div>
     <div class="pgno"><em>09</em> / 09<span class="pg-tag">SCORPIO</span></div>
@@ -2060,8 +2061,8 @@ const PHOTOS = [
     const d = document.createElement('div');
     d.className = 'p4-card';
     const src = f.indexOf('data:') === 0 ? f : 'assets/photos/' + f + '.jpg';
-    d.innerHTML = '<img loading="lazy" src="' + src + '" alt="">' +
-      '<div class="cap"><div class="t">' + t + '</div><div class="c">' + c + '</div></div>';
+    /* 照片上什么都不加：没有文案，也没有年份。时间线交给下方的进度条。 */
+    d.innerHTML = '<img loading="lazy" src="' + src + '" alt="">';
     rail.appendChild(d);
   });
   const upd = () => {
@@ -2076,7 +2077,6 @@ const PHOTOS = [
     $('#photoIdx').textContent = String(best + 1).padStart(2, '0');
     $('#photoBar').style.width = ((best + 1) / PHOTOS.length * 100).toFixed(1) + '%';
     dots.forEach((d, i) => d.classList.toggle('on', i === best));
-    $('#p4big').textContent = PHOTOS[best][1];
     const im0 = cards[best] && cards[best].querySelector('img');
     if (im0) $('#p4blur').style.backgroundImage = 'url("' + im0.src + '")';
   };
