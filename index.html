@@ -1153,20 +1153,30 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
     <div class="p8-lack" id="p8Lack"></div>
     <svg class="comet-orbit" viewBox="0 0 340 358" aria-hidden="true">
       <defs>
-        <linearGradient id="cometTail" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stop-color="rgba(206,232,255,0)"/>
-          <stop offset="0.45" stop-color="rgba(206,232,255,.42)"/>
-          <stop offset="1" stop-color="rgba(236,248,255,.98)"/>
+        <linearGradient id="cometTail" gradientUnits="userSpaceOnUse" x1="-140" y1="0" x2="0" y2="0">
+          <stop offset="0" stop-color="rgba(150,200,255,0)"/>
+          <stop offset="0.26" stop-color="rgba(175,215,255,.36)"/>
+          <stop offset="0.72" stop-color="rgba(212,238,255,.86)"/>
+          <stop offset="1" stop-color="rgba(255,255,255,1)"/>
         </linearGradient>
+        <radialGradient id="cometGlow">
+          <stop offset="0" stop-color="rgba(240,250,255,.95)"/>
+          <stop offset="0.3" stop-color="rgba(195,228,255,.40)"/>
+          <stop offset="1" stop-color="rgba(150,200,255,0)"/>
+        </radialGradient>
       </defs>
-      <ellipse cx="170" cy="186" rx="152" ry="88" fill="none"
-               stroke="rgba(158,196,255,.22)" stroke-width=".8" stroke-dasharray="1.5 6"/>
-      <g>
-        <path d="M0 0 L-82 0" stroke="url(#cometTail)" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
-        <circle r="2.9" fill="#EAF7FF"/>
-        <circle r="6.5" fill="none" stroke="rgba(200,232,255,.30)" stroke-width=".7"/>
-        <animateMotion dur="54s" repeatCount="indefinite" rotate="auto"
-          path="M 322 186 A 152 88 0 1 1 18 186 A 152 88 0 1 1 322 186"/>
+      <g transform="rotate(-22 170 186)">
+        <ellipse cx="170" cy="186" rx="152" ry="88" fill="none"
+                 stroke="rgba(180,214,255,.36)" stroke-width=".95" stroke-dasharray="1.6 5.5"/>
+        <g>
+          <path d="M0 0 L-140 0" stroke="url(#cometTail)" stroke-width="14" stroke-linecap="round" opacity=".32"/>
+          <path d="M0 0 L-126 0" stroke="url(#cometTail)" stroke-width="4.6" stroke-linecap="round" opacity="1"/>
+          <circle r="24" fill="url(#cometGlow)" opacity=".5"/>
+          <circle r="12" fill="url(#cometGlow)"/>
+          <circle r="4" fill="#FFFFFF"/>
+          <animateMotion dur="54s" repeatCount="indefinite" rotate="auto"
+            path="M 322 186 A 152 88 0 1 1 18 186 A 152 88 0 1 1 322 186"/>
+        </g>
       </g>
     </svg>
     <div class="p8-stage">
