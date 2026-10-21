@@ -594,7 +594,7 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 .p5-head h2{font-size:21px;font-weight:200;letter-spacing:.28em}
 .p5-head p{margin-top:10px;font-size:10px;letter-spacing:.22em;color:var(--muted)}
 .p5-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;padding:0 32px;z-index:4}
-.card{aspect-ratio:1/.88;perspective:900px;position:relative}
+.card{aspect-ratio:1/1.06;perspective:900px;position:relative}
 .card .face{box-shadow:0 12px 32px rgba(0,0,0,.34),0 0 26px rgba(var(--fc),.18),inset 0 1px 0 rgba(255,255,255,.12)}
 /* 六个礼物六种颜色，像六个盲盒 */
 .card:nth-child(1){--fc:255,143,168}
@@ -1055,9 +1055,9 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
       <h2 class="reveal">礼物</h2>
       <p class="reveal d1">翻到哪个，就是哪个</p>
     </div>
-    <div class="p5-big" aria-hidden="true">06</div>
+    <div class="p5-big" aria-hidden="true">04</div>
     <div class="p5-grid" id="giftGrid"></div>
-    <div class="p5-foot reveal d3">六 张 · 点 一 下 翻 开 · 每 张 都 不 一 样</div>
+    <div class="p5-foot reveal d3">四 张 · 点 一 下 翻 开 · 每 张 都 不 一 样</div>
     <div class="pgno"><em>06</em> / 09<span class="pg-tag">GIFTS</span></div>
   </section>
 
@@ -2088,12 +2088,10 @@ const PHOTOS = [
    8. P5 礼物
    ========================================================= */
 const GIFTS = [
-  { g: '今晚的饭，我请',       t: '01 · DINNER' },
-  { g: '一张去青岛的票',       t: '02 · TICKET' },
-  { g: '陪你逛一次街，不催',   t: '03 · TIME' },
-  { g: '写给你的第二封信',     t: '04 · LETTER' },
-  { g: '一起看一次日出',       t: '05 · SUNRISE' },
-  { g: '最后一个，当面拆',     t: '06 · ?' }
+  { g: '雾桃渐变的键盘',     t: '01 · KEYBOARD' },
+  { g: '真丝睡衣，粉糯木马', t: '02 · PAJAMAS' },
+  { g: '补气血的，每天两片', t: '03 · HEALTH' },
+  { g: '《亲爱的小狗 2》',   t: '04 · BOOK' }
 ];
 (function(){
   const box = $('#giftGrid');
