@@ -904,6 +904,21 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   .screen { content-visibility: auto; contain-intrinsic-size: auto 100dvh; }
 }
 
+/* ============ 桌面端 ============
+   所有尺寸都是按 390px 手机写的。电脑上打开时如果铺满整个窗口，
+   标题会缩在左上角、右边一大片空。这里把它收成一条居中的竖条。 */
+@media (min-width:560px){
+  html,body{height:100%}
+  body{display:flex;justify-content:center;background:#05060C}
+  .scroller{
+    width:430px;flex:0 0 430px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.055),0 28px 90px rgba(0,0,0,.8);
+  }
+  /* 右侧进度点、收集环跟着收进这条竖条里 */
+  .progress{right:calc(50% - 215px + 11px)}
+  .collect{right:calc(50% - 215px + 8px)}
+}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   .screen{opacity:1!important;transform:none!important}
@@ -1323,6 +1338,7 @@ const WISH_POS = [
     if (!b || b.classList.contains('done')) return;
     b.classList.add('done');
     wishDone++;
+    if (navigator.vibrate) { try { navigator.vibrate(12); } catch (e) {} }
 
     /* 炸一圈光环 */
     const rk = document.createElement('div');
