@@ -666,6 +666,9 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   font-size:7.5px;letter-spacing:.36em;color:var(--dim)}
 .days-label{font-size:9px;letter-spacing:.38em;color:var(--muted);margin-bottom:20px}
 .days-num{font-family:"Cascadia Mono",ui-monospace,monospace;font-size:23vw;font-weight:200;letter-spacing:-.03em;line-height:1;cursor:pointer;white-space:nowrap;
+  /* 高度锁死：换说法时字号会在 23vw 和 28px 之间跳，
+     不锁高度的话下面那排日期/单位会跟着上下弹。 */
+  height:clamp(96px,24vw,140px);display:flex;align-items:center;justify-content:center;
   background:linear-gradient(168deg,#FFF6E8 0%,#FFC46B 34%,#FF8B6E 66%,#FF6E9C 100%);
   filter:drop-shadow(0 6px 40px rgba(255,130,90,.28));
   -webkit-background-clip:text;background-clip:text;color:transparent;
