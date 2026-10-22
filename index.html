@@ -66,27 +66,11 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
   /* 整条页面只有这一条渐变。9 屏各占 1/9，停靠点是「屏中主色」与「屏与屏的交界色」。
      背景挂在滚动容器上并跟着内容一起滚（local），整页就是一条连续色带，
      不存在 9 个独立盒子拼接时的亚像素缝。 */
-  background-image:
-    /* 第一层：极淡点阵，26px 一格，贯穿整页 —— 让"纯渐变"变成有暗纹的质感层 */
-    radial-gradient(circle, rgba(255,255,255,.062) 1px, transparent 1.4px),
-    /* 第二层：整页渐变色带 */
-    linear-gradient(180deg,
-    #1E2450 0%,    #333F8C 5.56%,
-    #4C2348 11.11%,#8A2F48 16.67%,
-    #2A1846 22.22%,#05081A 27.78%,
-    #0E2A42 33.33%,#21477E 38.89%,
-    #3E2A1A 44.44%,#5A3A1E 50%,
-    #3A2058 55.56%,#4A2A88 61.11%,
-    #4C1526 66.67%,#74202A 72.22%,
-    #12404A 77.78%,#18525E 83.33%,
-    #3E1C56 88.89%,#4E2180 94.44%,
-    #4E2180 100%);
-  background-size:26px 26px, 100% 100%;
-  background-attachment:local, local;
-  background-repeat:repeat, no-repeat;}
+
+}
 .scroller::-webkit-scrollbar{display:none}
 .screen{
-  height:100dvh;min-height:100dvh;scroll-snap-align:start;
+  height:100dvh;min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;
   position:relative;overflow:hidden;display:flex;flex-direction:column;isolation:isolate;
   /* 背景是一条纵向渐变：顶部接住上一屏的颜色、中间是本屏色、底部交给下一屏。
      于是连成一条长页面时，滚动过程中背景是连续流动的，不会硬切。 */
@@ -122,7 +106,26 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
 
 /* 内容容器：给桥接元素一个可定位的基准（.scroller 自己不能当基准，
    否则绝对定位子元素会相对可视区、不随滚动内容走） */
-.page{position:relative}
+.page{position:relative;
+  /* 整页渐变 + 点阵放这里：它是内容层，滚动时背景跟着内容一起平移，
+     不再是 background-attachment:local 那种每帧重算整条 900vh 的开销。 */
+background-image:
+    /* 第一层：极淡点阵，26px 一格，贯穿整页 —— 让"纯渐变"变成有暗纹的质感层 */
+    radial-gradient(circle, rgba(255,255,255,.062) 1px, transparent 1.4px),
+    /* 第二层：整页渐变色带 */
+    linear-gradient(180deg,
+    #1E2450 0%,    #333F8C 5.56%,
+    #4C2348 11.11%,#8A2F48 16.67%,
+    #2A1846 22.22%,#05081A 27.78%,
+    #0E2A42 33.33%,#21477E 38.89%,
+    #3E2A1A 44.44%,#5A3A1E 50%,
+    #3A2058 55.56%,#4A2A88 61.11%,
+    #4C1526 66.67%,#74202A 72.22%,
+    #12404A 77.78%,#18525E 83.33%,
+    #3E1C56 88.89%,#4E2180 94.44%,
+    #4E2180 100%);
+  background-size:26px 26px, 100% 100%;
+  background-repeat:repeat, no-repeat;}
 
 /* ===== 流动极光 =====
    六团巨大的彩色光晕，分布在整页的不同高度，各自用 transform 缓慢漂移。
@@ -1169,8 +1172,26 @@ button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer
         <ellipse cx="170" cy="186" rx="152" ry="88" fill="none"
                  stroke="rgba(180,214,255,.36)" stroke-width=".95" stroke-dasharray="1.6 5.5"/>
         <g>
-          <path d="M0 0 L-136 0" stroke="url(#cometTail)" stroke-width="8.5" stroke-linecap="round" opacity=".22"/>
-          <path d="M0 0 L-122 0" stroke="url(#cometTail)" stroke-width="3.4" stroke-linecap="round" opacity=".92"/>
+          <!-- 彗尾是真的散开的：三条尾丝按角度分叉（上 / 中 / 下），
+               越往外越淡，合起来是一把扫帚，不是一根棍子。 -->
+          <!-- 上层：向上偏 -->
+          <path d="M0 0 C -42 -20, -92 -46, -132 -74"
+                stroke="url(#cometTail)" stroke-width="7" stroke-linecap="round"
+                fill="none" opacity=".14"/>
+          <!-- 下层：向下偏 -->
+          <path d="M0 0 C -40 4, -94 14, -138 30"
+                stroke="url(#cometTail)" stroke-width="8" stroke-linecap="round"
+                fill="none" opacity=".12"/>
+          <!-- 中间最宽的一股（尘埃尾），略弯 -->
+          <path d="M0 0 C -46 -4, -100 -14, -152 -28"
+                stroke="url(#cometTail)" stroke-width="13" stroke-linecap="round"
+                fill="none" opacity=".20"/>
+          <!-- 主轴：最亮、最长 -->
+          <path d="M0 0 C -44 -8, -102 -22, -156 -42"
+                stroke="url(#cometTail)" stroke-width="4" stroke-linecap="round"
+                fill="none" opacity=".95"/>
+          <circle r="17" fill="url(#cometGlow)" opacity=".34"/>
+          <circle r="4.2" fill="#FFFFFF"/>
           <circle r="19" fill="url(#cometGlow)" opacity=".42"/>
           <circle r="12" fill="url(#cometGlow)"/>
           <circle r="4" fill="#FFFFFF"/>
