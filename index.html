@@ -2659,7 +2659,7 @@ const CITIES = [
 
   let dpr = 1;
   function fit(){
-    dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(W * dpr);
     cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -2740,7 +2740,7 @@ const CITIES = [
       p.life -= 1;
       if (p.life <= 0) P_.splice(i, 1);
     }
-    if (P_.length > 850) P_.splice(0, P_.length - 850);
+    if (P_.length > 650) P_.splice(0, P_.length - 650);
 
     /* 绘制 */
     ctx.clearRect(0, 0, W, H);
