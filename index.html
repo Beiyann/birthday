@@ -2720,13 +2720,14 @@ const CITIES = [
     /* 粒子要够大够多才连成"雾状尾巴"，太小就只是几点星火 */
     /* 轨道半径缩到 26：彗星在中心附近绕小圈，尾巴 200 单位才铺得开。
        发射量、扩散角都放大，让粒子真正散成扇形而不是挤成一条线。 */
-    for (let i = 0; i < 4; i++) {
-      spawn(ox, oy, away, 0.88 * power * (0.55 + Math.random() * 0.95),
-            175 + Math.random() * 95, 6.4 + Math.random() * 4.0, SPR_ION, 0.60);
+    /* 彗尾是细长的一束，不是炸开的烟花：粒子要小、扩散要窄、数量要少。 */
+    for (let i = 0; i < 3; i++) {
+      spawn(ox, oy, away, 0.88 * power * (0.72 + Math.random() * 0.55),
+            175 + Math.random() * 95, 2.3 + Math.random() * 1.4, SPR_ION, 0.30);
     }
-    if (Math.random() < 0.85) {
-      spawn(ox, oy, away, 0.50 * power * (0.5 + Math.random() * 0.9),
-            265 + Math.random() * 110, 8.8 + Math.random() * 4.8, SPR_DUST, 0.92);
+    if (Math.random() < 0.62) {
+      spawn(ox, oy, away, 0.50 * power * (0.68 + Math.random() * 0.5),
+            265 + Math.random() * 110, 3.2 + Math.random() * 1.8, SPR_DUST, 0.42);
     }
 
     /* 更新 */
@@ -2737,7 +2738,7 @@ const CITIES = [
       p.life -= 1;
       if (p.life <= 0) P_.splice(i, 1);
     }
-    if (P_.length > 1700) P_.splice(0, P_.length - 1700);
+    if (P_.length > 850) P_.splice(0, P_.length - 850);
 
     /* 绘制 */
     ctx.clearRect(0, 0, W, H);
@@ -2772,11 +2773,11 @@ const CITIES = [
     ctx.globalCompositeOperation = 'source-over';
 
     /* 彗发：一团亮云 */
-    const coma = 26 * power;
+    const coma = 12 * power;
     ctx.globalAlpha = 0.55;
     ctx.drawImage(SPR_HEAD, ox - coma, oy - coma, coma * 2, coma * 2);
     ctx.globalAlpha = 1;
-    ctx.drawImage(SPR_HEAD, ox - 7, oy - 7, 14, 14);
+    ctx.drawImage(SPR_HEAD, ox - 5, oy - 5, 10, 10);
 
     ctx.restore();
 
