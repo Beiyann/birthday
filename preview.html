@@ -2650,7 +2650,7 @@ const CITIES = [
   const ctx = cv.getContext('2d');
 
   const W = 340, H = 358;
-  const CX = 170, CY = 186, A = 52, B = 32;
+  const CX = 170, CY = 186, A = 76, B = 46;
   const FOC = Math.sqrt(A * A - B * B);
   const SX = CX - FOC, SY = CY;              /* 太阳在左焦点 */
   const R_MIN = A - FOC, R_MAX = A + FOC;
@@ -2775,11 +2775,11 @@ const CITIES = [
     ctx.globalCompositeOperation = 'source-over';
 
     /* 彗发：一团亮云 */
-    const coma = 6.5 * power;
+    const coma = 4.4 * power;
     ctx.globalAlpha = 0.40;
     ctx.drawImage(SPR_HEAD, ox - coma, oy - coma, coma * 2, coma * 2);
     ctx.globalAlpha = 1;
-    ctx.drawImage(SPR_HEAD, ox - 3, oy - 3, 6, 6);
+    ctx.drawImage(SPR_HEAD, ox - 2.2, oy - 2.2, 4.4, 4.4);
 
     ctx.restore();
 
