@@ -2712,13 +2712,15 @@ const CITIES = [
     const power = 1.55 - k * 0.95;
 
     /* 发射：离子尾（细、快、蓝） + 尘埃尾（慢、重、黄） */
-    for (let i = 0; i < 3; i++) {
-      spawn(ox, oy, away, 0.55 * power, 78 + Math.random() * 40,
-            1.5 + Math.random() * 1.1, SPR_ION, 0.42);
+    /* 速度和寿命决定尾巴长度：位移 ≈ 速度 × 寿命。
+       现在约 1.15 × 175 ≈ 200 单位（画布宽 340），能拉出很长的尾。 */
+    for (let i = 0; i < 2; i++) {
+      spawn(ox, oy, away, 1.15 * power, 150 + Math.random() * 60,
+            1.6 + Math.random() * 1.2, SPR_ION, 0.34);
     }
-    if (Math.random() < 0.85) {
-      spawn(ox, oy, away, 0.30 * power, 130 + Math.random() * 60,
-            2.6 + Math.random() * 1.6, SPR_DUST, 0.70);
+    if (Math.random() < 0.62) {
+      spawn(ox, oy, away, 0.62 * power, 220 + Math.random() * 80,
+            2.8 + Math.random() * 1.8, SPR_DUST, 0.55);
     }
 
     /* 更新 */
@@ -2729,7 +2731,7 @@ const CITIES = [
       p.life -= 1;
       if (p.life <= 0) P_.splice(i, 1);
     }
-    if (P_.length > 900) P_.splice(0, P_.length - 900);
+    if (P_.length > 1200) P_.splice(0, P_.length - 1200);
 
     /* 绘制 */
     ctx.clearRect(0, 0, W, H);
@@ -2751,7 +2753,7 @@ const CITIES = [
     ctx.globalCompositeOperation = 'lighter';
     for (const p of P_) {
       const k2 = p.life / p.max;
-      ctx.globalAlpha = Math.min(1, k2 * 0.95);
+      ctx.globalAlpha = Math.min(1, k2 * k2 * 1.6);
       const sz = p.size * (0.55 + k2 * 0.75);
       ctx.drawImage(p.spr, p.x - sz, p.y - sz, sz * 2, sz * 2);
     }
