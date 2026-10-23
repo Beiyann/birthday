@@ -2650,7 +2650,7 @@ const CITIES = [
   const ctx = cv.getContext('2d');
 
   const W = 340, H = 358;
-  const CX = 170, CY = 186, A = 52, B = 32;
+  const CX = 170, CY = 186, A = 132, B = 79;
   const FOC = Math.sqrt(A * A - B * B);
   const SX = CX - FOC, SY = CY;              /* 太阳在左焦点 */
   const R_MIN = A - FOC, R_MAX = A + FOC;
@@ -2720,14 +2720,16 @@ const CITIES = [
     /* 粒子要够大够多才连成"雾状尾巴"，太小就只是几点星火 */
     /* 轨道半径缩到 26：彗星在中心附近绕小圈，尾巴 200 单位才铺得开。
        发射量、扩散角都放大，让粒子真正散成扇形而不是挤成一条线。 */
-    /* 彗尾是细长的一束，不是炸开的烟花：粒子要小、扩散要窄、数量要少。 */
-    for (let i = 0; i < 3; i++) {
-      spawn(ox, oy, away, 0.88 * power * (0.72 + Math.random() * 0.55),
-            175 + Math.random() * 95, 2.3 + Math.random() * 1.4, SPR_ION, 0.30);
+    /* 尾巴长度 = 速度 × 寿命，控制在 120 左右：
+       轨道半径 52 + 尾巴 120 ≈ 画布半宽 170，正好铺满不出界。
+       扩散角收到 0.10，粒子几乎都朝同一个方向飞，才像"束"不像"刷子"。 */
+    for (let i = 0; i < 5; i++) {
+      spawn(ox, oy, away, 0.70 * power * (0.85 + Math.random() * 0.3),
+            150 + Math.random() * 55, 1.7 + Math.random() * 1.0, SPR_ION, 0.17);
     }
-    if (Math.random() < 0.62) {
-      spawn(ox, oy, away, 0.50 * power * (0.68 + Math.random() * 0.5),
-            265 + Math.random() * 110, 3.2 + Math.random() * 1.8, SPR_DUST, 0.42);
+    if (Math.random() < 0.8) {
+      spawn(ox, oy, away, 0.42 * power * (0.8 + Math.random() * 0.35),
+            185 + Math.random() * 70, 2.2 + Math.random() * 1.2, SPR_DUST, 0.26);
     }
 
     /* 更新 */
@@ -2750,9 +2752,9 @@ const CITIES = [
     /* 轨道虚线 */
     ctx.beginPath();
     ctx.ellipse(CX, CY, A, B, 0, 0, Math.PI * 2);
-    ctx.setLineDash([1.6, 5.5]);
-    ctx.lineWidth = 0.85;
-    ctx.strokeStyle = 'rgba(180,214,255,.20)';
+    ctx.setLineDash([2.6, 5.0]);
+    ctx.lineWidth = 1.3;
+    ctx.strokeStyle = 'rgba(200,224,255,.58)';
     ctx.stroke();
     ctx.setLineDash([]);
 
@@ -2773,11 +2775,11 @@ const CITIES = [
     ctx.globalCompositeOperation = 'source-over';
 
     /* 彗发：一团亮云 */
-    const coma = 12 * power;
-    ctx.globalAlpha = 0.55;
+    const coma = 0.95 * power;
+    ctx.globalAlpha = 0.22;
     ctx.drawImage(SPR_HEAD, ox - coma, oy - coma, coma * 2, coma * 2);
     ctx.globalAlpha = 1;
-    ctx.drawImage(SPR_HEAD, ox - 5, oy - 5, 10, 10);
+    ctx.drawImage(SPR_HEAD, ox - 1.0, oy - 1.0, 2.0, 2.0);
 
     ctx.restore();
 
