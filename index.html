@@ -766,7 +766,7 @@ background-image:
 /* 哈雷彗星：一条极淡的椭圆轨道 + 彗星拖着尾巴沿轨道慢慢转。
    SMIL 的 animateMotion 走 GPU 合成，比每帧改 transform 便宜。 */
 .comet-orbit{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
-  width:112vw;max-width:460px;aspect-ratio:340/358;z-index:1;pointer-events:none;opacity:.85}
+  width:98vw;max-width:404px;aspect-ratio:340/358;z-index:1;pointer-events:none;opacity:.85}
 
 /* ============ 浮层提示 ============ */
 .toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translate(-50%,10px);
@@ -2650,7 +2650,7 @@ const CITIES = [
   const ctx = cv.getContext('2d');
 
   const W = 340, H = 358;
-  const CX = 170, CY = 186, A = 96, B = 58;
+  const CX = 170, CY = 186, A = 26, B = 16;
   const FOC = Math.sqrt(A * A - B * B);
   const SX = CX - FOC, SY = CY;              /* 太阳在左焦点 */
   const R_MIN = A - FOC, R_MAX = A + FOC;
@@ -2685,6 +2685,7 @@ const CITIES = [
   const SPR_HEAD = sprite(255, 255, 255);
 
   const P_ = [];                              /* 粒子池 */
+  window.__cometDbg = { P: P_, frames: 0, emits: 0 };
   function spawn(x, y, deg, spd, life, size, spr, spread){
     P_.push({
       x: x, y: y,
@@ -2714,13 +2715,18 @@ const CITIES = [
     /* 发射：离子尾（细、快、蓝） + 尘埃尾（慢、重、黄） */
     /* 速度和寿命决定尾巴长度：位移 ≈ 速度 × 寿命。
        现在约 1.15 × 175 ≈ 200 单位（画布宽 340），能拉出很长的尾。 */
-    for (let i = 0; i < 2; i++) {
-      spawn(ox, oy, away, 1.15 * power, 150 + Math.random() * 60,
-            1.6 + Math.random() * 1.2, SPR_ION, 0.34);
+    /* 位移 ≈ 速度 × 寿命。轨道半径 56，画布半宽 170，
+       尾巴控制在 150 左右刚好铺满画面，不会一出核就被裁。 */
+    /* 粒子要够大够多才连成"雾状尾巴"，太小就只是几点星火 */
+    /* 轨道半径缩到 26：彗星在中心附近绕小圈，尾巴 200 单位才铺得开。
+       发射量、扩散角都放大，让粒子真正散成扇形而不是挤成一条线。 */
+    for (let i = 0; i < 4; i++) {
+      spawn(ox, oy, away, 0.88 * power * (0.55 + Math.random() * 0.95),
+            175 + Math.random() * 95, 6.4 + Math.random() * 4.0, SPR_ION, 0.60);
     }
-    if (Math.random() < 0.62) {
-      spawn(ox, oy, away, 0.62 * power, 220 + Math.random() * 80,
-            2.8 + Math.random() * 1.8, SPR_DUST, 0.55);
+    if (Math.random() < 0.85) {
+      spawn(ox, oy, away, 0.50 * power * (0.5 + Math.random() * 0.9),
+            265 + Math.random() * 110, 8.8 + Math.random() * 4.8, SPR_DUST, 0.92);
     }
 
     /* 更新 */
@@ -2731,7 +2737,7 @@ const CITIES = [
       p.life -= 1;
       if (p.life <= 0) P_.splice(i, 1);
     }
-    if (P_.length > 1200) P_.splice(0, P_.length - 1200);
+    if (P_.length > 1700) P_.splice(0, P_.length - 1700);
 
     /* 绘制 */
     ctx.clearRect(0, 0, W, H);
@@ -2751,9 +2757,14 @@ const CITIES = [
 
     /* 粒子：加法混合，叠出光感 */
     ctx.globalCompositeOperation = 'lighter';
+    const EDGE = 30;
     for (const p of P_) {
       const k2 = p.life / p.max;
-      ctx.globalAlpha = Math.min(1, k2 * k2 * 1.6);
+      let a = Math.min(1, k2 * k2 * 1.6);
+      /* 接近边界时淡出，不让尾巴被画布硬切一刀 */
+      const edgeD = Math.min(p.x, W - p.x, p.y, H - p.y);
+      if (edgeD < EDGE) a *= Math.max(0, edgeD / EDGE);
+      ctx.globalAlpha = a;
       const sz = p.size * (0.55 + k2 * 0.75);
       ctx.drawImage(p.spr, p.x - sz, p.y - sz, sz * 2, sz * 2);
     }
@@ -2769,6 +2780,7 @@ const CITIES = [
 
     ctx.restore();
 
+    window.__cometDbg.frames++;
     raf = requestAnimationFrame(frame);
   }
 
